@@ -5,6 +5,7 @@ from app.auth import schemas , models
 from app.utils import pwd_context
 from app.utils import get_db
 from app import oauth2
+from fastapi.security import OAuth2PasswordRequestForm
 from app.auth.service import login_user_service, add_new_user_service ,forget_password_service
 
 rejo=FastAPI()
@@ -16,7 +17,7 @@ router= APIRouter(
 # user singin
 
 @router.post('/singin') 
-def login_user(user_credentials:schemas.Userlogin , db:Session = Depends (get_db)) :
+def login_user(user_credentials:OAuth2PasswordRequestForm = Depends() , db:Session = Depends (get_db)) :
    
    return login_user_service(user_credentials, db)
 
@@ -26,7 +27,8 @@ def login_user(user_credentials:schemas.Userlogin , db:Session = Depends (get_db
 
 @router.post("/singup", status_code=status.HTTP_201_CREATED,
           response_model=schemas.users_response)
-def create_user(user: schemas.user_request, db: Session = Depends(get_db)):
+def create_user(user: schemas.user_request, db: Session = Depends(get_db),
+                get_current_user :int = Depends(oauth2.get_current_user)) :
 
 
     return add_new_user_service(user,db)

@@ -2,6 +2,7 @@ from app import utils
 from main import FastAPI , Response , status , HTTPException, Depends, APIRouter
 from sqlalchemy.orm import Session 
 from app.auth import models,schemas 
+from app.user import models,schemas
 from app.utils import pwd_context
 from app.utils import get_db
 from app import oauth2 
@@ -12,7 +13,7 @@ from app.database import engine , SessionLocal
 
 def login_user_service(user_credentials, db: Session):
         
-        user = db.query(models.singup_model).filter(models.singup_model.email == user_credentials.email).first()
+        user = db.query(models.user).filter(models.user.email == user_credentials.username).first()
         if not user :
             raise HTTPException(status_code= status.HTTP_404_NOT_FOUND , detail=f"invalid credentials" )
     
@@ -22,7 +23,7 @@ def login_user_service(user_credentials, db: Session):
                 detail=f"invalid credentials"
                 )
     
-        access_token = oauth2.create_access_token(data={"user_id": str(user.id)})
+        access_token = oauth2.create_access_token(data={"user_id": str(user.user_id)})
 
         return {"access token" : access_token , "token type ": "bearer"}
 
@@ -38,7 +39,7 @@ def add_new_user_service(user,db):
 
     
 
-    new_users = models.singup_model(**user_data)
+    new_users = models.user(**user_data)
 
     db.add(new_users)
     db.commit()
@@ -53,8 +54,8 @@ def forget_password_service(username:str , new_password : str , db : Session ):
 
     
 
-    user = db.query(models.singup_model).filter(
-        models.singup_model.username == username
+    user = db.query(models.user).filter(
+        models.user.username == username
     ).first()
 
     if not user:

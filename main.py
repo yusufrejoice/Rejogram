@@ -16,6 +16,7 @@ from app.auth import auth
 from app.followers import followers
 from app.following import following
 from app.comment import comment
+from app.post import post
 from app.utils import get_db
 from app.following import models
 from app.followers import models
@@ -33,3 +34,4 @@ models.Base.metadata.create_all(bind=engine)
 # rejo.include_router(comment.router)
 rejo.include_router(utils.router)
 rejo.include_router(auth.router)
+rejo.include_router(post.router)
