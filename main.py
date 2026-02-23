@@ -13,13 +13,11 @@ from app.utils import pwd_context
 from app.user import user
 from app.like import like
 from app.auth import auth
-from app.followers import followers
-from app.following import following
+from app.followes import followes
 from app.comment import comment
 from app.post import post
 from app.utils import get_db
-from app.following import models
-from app.followers import models
+from app.followes import models
 from app.comment import models
 from app.user import models
 
@@ -27,10 +25,9 @@ from app.user import models
 
 rejo = FastAPI()
 models.Base.metadata.create_all(bind=engine)
-# rejo.include_router(following.router)
-# rejo.include_router(followers.router)
-# rejo.include_router(user.router)
-# rejo.include_router(like.router)
+rejo.include_router(followes.router)
+rejo.include_router(user.router)
+rejo.include_router(like.router)
 rejo.include_router(comment.router)
 rejo.include_router(utils.router)
 rejo.include_router(auth.router)

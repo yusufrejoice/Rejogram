@@ -1,7 +1,7 @@
 from app import utils
 from main import FastAPI , Response , status , HTTPException, Depends, APIRouter
 from sqlalchemy.orm import Session 
-from app.auth import schemas , models
+from app.auth import schemas
 from app.utils import pwd_context
 from app.utils import get_db
 from app import oauth2
@@ -28,7 +28,7 @@ def login_user(user_credentials:OAuth2PasswordRequestForm = Depends() , db:Sessi
 @router.post("/singup", status_code=status.HTTP_201_CREATED,
           response_model=schemas.users_response)
 def create_user(user: schemas.user_request, db: Session = Depends(get_db),
-                get_current_user :int = Depends(oauth2.get_current_user)) :
+                ) :
 
 
     return add_new_user_service(user,db)

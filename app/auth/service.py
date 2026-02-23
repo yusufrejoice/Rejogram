@@ -1,8 +1,7 @@
 from app import utils
 from main import FastAPI , Response , status , HTTPException, Depends, APIRouter
-from sqlalchemy.orm import Session 
-from app.auth import models,schemas 
-from app.user import models,schemas
+from sqlalchemy.orm import Session
+from app.user import models
 from app.utils import pwd_context
 from app.utils import get_db
 from app import oauth2 
@@ -13,7 +12,7 @@ from app.database import engine , SessionLocal
 
 def login_user_service(user_credentials, db: Session):
         
-        user = db.query(models.user).filter(models.user.email == user_credentials.username).first()
+        user = db.query(models.User).filter(models.User.email == user_credentials.username).first()
         if not user :
             raise HTTPException(status_code= status.HTTP_404_NOT_FOUND , detail=f"invalid credentials" )
     

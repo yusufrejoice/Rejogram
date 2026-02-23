@@ -1,34 +1,17 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from app.database import get_db
-from app.auth.models import User
-from app.post.models import Post
-from app.comment.models import Comment
-from app.like.models import Like
-from app.follows.models import Follow
+from app.utils import get_db
+from app import oauth2
+from app.user.service import get_me_service
+from app.user.schemas import MeResponse
 
-router = APIRouter()
-
-@router.get("/profile/{user_id}")
-def get_profile(user_id: int, db: Session = Depends(get_db)):
-
-    user = db.query(User).filter(User.id == user_id).first()
-
-    posts = db.query(Post).filter(Post.user_id == user_id).all()
-
-    followers = db.query(Follow).filter(Follow.following_id == user_id).count()
-
-    following = db.query(Follow).filter(Follow.follower_id == user_id).count()
-
-    comments = db.query(Comment).filter(Comment.user_id == user_id).all()
-
-    likes = db.query(Like).filter(Like.user_id == user_id).all()
-
-    return {
-        "username": user.username,
-        "followers": followers,
-        "following": following,
-        "posts": posts,
-        "comments": comments,
-        "likes": likes
-    }
+router = APIRouter(
+    prefix="/users",
+    tags=["users"]
+)
+@router.get("/me", response_model=MeResponse)
+def get_me(
+    db: Session = Depends(get_db),
+    current_user = Depends(oauth2.get_current_user)
+):
+    return get_me_service(db, current_user)

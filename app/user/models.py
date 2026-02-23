@@ -5,7 +5,7 @@ import uuid
 from sqlalchemy.dialects.postgresql import UUID
 
 
-class user (Base):
+class User (Base):
     __tablename__ = "users"
 
     user_id = Column(Integer,primary_key=True, nullable=False )

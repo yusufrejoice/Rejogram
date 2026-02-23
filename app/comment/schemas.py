@@ -12,7 +12,6 @@ class cmt_request(BaseModel):
     contant : str
     published : bool
     post_id : int
-    owner_id : int
     
     
 
@@ -20,13 +19,16 @@ class cmt_response(BaseModel):
     contant : str
     published : bool
     created_at : datetime
-    post_id : int
+    post_id : int 
     owner_id : int
     
     
 
     class confing:
         orm_mode=True
+
+
+        
 
 
 

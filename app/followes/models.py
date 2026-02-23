@@ -1,12 +1,25 @@
-from sqlalchemy import Column, Integer, String, Boolean ,Date ,JSON ,Float , TIMESTAMP , text , ForeignKey 
-from sqlalchemy.sql.expression import null
+# from sqlalchemy import Column, Integer, String, Boolean ,Date  , text , ForeignKey  , ARRAY
+# from sqlalchemy.sql.expression import null
+# from app.database import Base
+# import uuid
+# from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import Column, Integer, ForeignKey
 from app.database import Base
-import uuid
-from sqlalchemy.dialects.postgresql import UUID
+
+
 
 class Follow(Base):
-    __tablename__ = "follows"
+    __tablename__ = "followers"
 
-    id = Column(Integer, primary_key=True)
-    follower_id = Column(Integer, ForeignKey("users.id"))
-    following_id = Column(Integer, ForeignKey("users.id"))
+    follower_id = Column(
+        Integer,
+        ForeignKey("users.user_id", ondelete="CASCADE"),
+        primary_key=True
+    )
+
+    following_id = Column(
+        Integer,
+        ForeignKey("users.user_id", ondelete="CASCADE"),
+        primary_key=True
+    )
+    

@@ -9,10 +9,9 @@ from typing import Optional
 # schema for post
 
 class post_request(BaseModel):
-    tital : str
-    contant : str
-    published : bool
-    owner_id : int
+    tital: str
+    contant: str
+    published: bool
     
     
 
