@@ -20,8 +20,9 @@ from app.utils import get_db
 from app.followes import models
 from app.comment import models
 from app.user import models
+import logging
 
-
+logging.basicConfig(level=logging.INFO)
 
 rejo = FastAPI()
 models.Base.metadata.create_all(bind=engine)

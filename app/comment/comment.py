@@ -7,6 +7,10 @@ from app.utils import get_db
 from app.oauth2 import get_current_user
 from app.comment.service import  get_all_comments_service , add_new_comments_service , get_via_id_service ,remove_cmt_service ,update_cmt_service
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 router= APIRouter(
     prefix="/comment",
     tags= ['comments']
@@ -17,10 +21,11 @@ air = FastAPI()
 
 # getting all commants   
 @router.get("/get_all")
-def get_all_commants(db:Session = Depends (get_db)):
-    
+def get_all_commants(db: Session = Depends(get_db)):
 
-    return get_all_comments_service(db) 
+    logger.info("GET /comment/get_all endpoint called")
+
+    return get_all_comments_service(db)
 
 
 
@@ -33,15 +38,21 @@ def add_new_comments(
     current_user = Depends(get_current_user)
 ):
 
+    logger.info(f"User {current_user.user_id} hitting ADD comment endpoint")
+
     return add_new_comments_service(cmt, db, current_user)
 
-#getting commants details via id         
+
+
+#delete comment      
 @router.delete("/remove/{id}")
 def remove_cmt(
     id: str,
     db: Session = Depends(get_db),
     current_user = Depends(get_current_user)
 ):
+
+    logger.info(f"User {current_user.user_id} trying to delete comment {id}")
 
     return remove_cmt_service(id, db, current_user)
 
@@ -56,4 +67,6 @@ def update_cmt(
     current_user = Depends(get_current_user)
 ):
     
+    logger.info(f"User {current_user.user_id} updating comment {id}")
+
     return update_cmt_service(id, cmt, db, current_user)

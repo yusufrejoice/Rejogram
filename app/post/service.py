@@ -4,13 +4,16 @@ from app.post import models,schemas
 from app.database import engine , SessionLocal
 from app.utils import pwd_context
 from app.utils import get_db
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def get_all_posts_service(db,current_user):
 
-    posts = db.query(models.post).filter(
-        models.post.owner_id == current_user.user_id
-    ).all()
+    posts = db.query(models.post).filter.all()
+
+    logger.info(f" getting all post" )
 
     return posts
 
@@ -28,20 +31,11 @@ def add_new_post_service(post, db,current_user):
     db.commit()
     db.refresh(new_post)
 
+    logger.info(f" uploaded by ID {current_user.user_id} to ID {id}")
+
     return new_post
 
 
-# def get_via_id_service(id,db,current_user):
-
-#     post_details = db.query(models.post).filter(models.post.owner_id == current_user.user_id
-#     ).all()
-    
-    
-#     if not post_details :
-#         raise HTTPException(status_code= status.HTTP_404_NOT_FOUND ,
-#                             detail= f"post with id : {id} was not found ")
-
-#     return post_details
 
 
 def remove_post_service(id, db, current_user):
@@ -59,6 +53,8 @@ def remove_post_service(id, db, current_user):
 
     db.delete(deleted_post)
     db.commit()
+
+    logger.info(f" deleted by ID {current_user.user_id} to ID {id}")
 
     return {"message": "Post deleted successfully"}
 
@@ -82,5 +78,7 @@ def update_post_service(id, post, db, current_user):
 
     db.commit()
     db.refresh(updated_post)
+
+    logger.info(f" updated by ID {current_user.user_id} to ID {id}")
 
     return updated_post

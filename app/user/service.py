@@ -2,6 +2,9 @@ from app.post.models import post
 from app.like.models import Like
 from app.followes.models import Follow
 from app.comment.models import comment
+import logging
+
+logger = logging.getLogger(__name__)
 
 def get_me_service(db, current_user):
 
@@ -29,6 +32,8 @@ def get_me_service(db, current_user):
     comments = db.query(comment).filter(
         comment.owner_id  == current_user.user_id
     ).all()
+
+    logger.info(f" fatched by ID {current_user.user_id} all details")
 
     return {
         "user_id": current_user.user_id,
